@@ -1,6 +1,6 @@
 services:
   prometheus:
-    image: prom/prometheus:v3.3.1
+    image: prom/prometheus:latest
     container_name: prometheus
     ports:
       - "9090:9090"
@@ -11,7 +11,7 @@ services:
       - monitoring
 
   grafana:
-    image: grafana/grafana:12.0.0
+    image: grafana/grafana:latest
     container_name: grafana
     ports:
       - "3000:3000"
@@ -26,12 +26,26 @@ services:
       - grafana_data:/var/lib/grafana
 
   node_exporter:
-    image: prom/node-exporter:v1.9.1
+    image: prom/node-exporter:latest
     container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+      - '--web.disable-exporter-metrics'
+      - '--collector.disable-defaults'
+      - '--collector.mdadm'
+      - '--collector.filesystem'
+      - '--collector.diskstats'
+      - '--collector.cpu'
+      - '--collector.filesystem.fs-types-include=(ext4)'
+    pid: host
+    user: root
+    restart: unless-stopped
     ports:
       - "9100:9100"
     networks:
       - monitoring
+    volumes:
+      - '/:/host:ro'
 
 networks:
   monitoring:
