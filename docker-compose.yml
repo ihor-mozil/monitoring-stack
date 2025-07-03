@@ -36,9 +36,16 @@ services:
       - '--collector.filesystem'
       - '--collector.diskstats'
       - '--collector.cpu'
+      - '--collector.cpufreq'
+      - '--collector.meminfo'
+      - '--collector.hwmon'
+      - '--collector.uname'
+      - '--collector.time'
+      - '--collector.stat'
       - '--collector.filesystem.fs-types-include=(ext4)'
     pid: host
     user: root
+    hostname: nugget_node
     restart: unless-stopped
     ports:
       - "9100:9100"
