@@ -2,25 +2,23 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    restart: always
     ports:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
-    networks:
-      - monitoring
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
+    restart: always
     ports:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
-    networks:
-      - monitoring
     volumes:
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources
       - grafana_data:/var/lib/grafana
@@ -28,6 +26,7 @@ services:
   node_exporter:
     image: prom/node-exporter:latest
     container_name: node_exporter
+    restart: always
     command:
       - '--path.rootfs=/host'
       - '--web.disable-exporter-metrics'
@@ -46,17 +45,10 @@ services:
     pid: host
     user: root
     hostname: nugget_node
-    restart: unless-stopped
     ports:
       - "9100:9100"
-    networks:
-      - monitoring
     volumes:
       - '/:/host:ro'
-
-networks:
-  monitoring:
-    driver: bridge
 
 volumes:
   prometheus_data:
