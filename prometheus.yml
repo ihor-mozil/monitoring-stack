@@ -5,3 +5,6 @@ scrape_configs:
   - job_name: 'node'
     static_configs:
       - targets: ['node_exporter:9100']  # This points to the Node Exporter container
+  - job_name: 'smartctl'
+    static_configs:
+      - targets: ['smartctl-exporter:9633']  # This points to the Node Exporter container
