@@ -55,6 +55,7 @@ services:
 
   smartctl-exporter:
     image: prometheuscommunity/smartctl-exporter
+    container_name: smartctl-exporter
     privileged: true
     user: root
     ports:
@@ -66,6 +67,7 @@ services:
       - "--smartctl.device=/dev/sdb"
       - "--smartctl.device=/dev/sdc"
       - "--smartctl.powermode-check=never"
+    restart: always
 
 volumes:
   prometheus_data:
